@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyWings - Flight Booking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Common Styles */
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #3b82f6;
+            --text: #1e293b;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        /* Flight Search Page */
+        .search-form {
+            background-color: var(--card);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            font-size: 1rem;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+        
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary {
+            background-color: #64748b;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+        
+        /* Results Section */
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .results-container {
+            background-color: var(--card);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .flight-card {
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .flight-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+        
+        .airline {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .airline-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .flight-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .flight-info {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .flight-time {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .flight-city {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .flight-route {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .flight-duration {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .flight-stops {
+            font-size: 0.75rem;
+            background-color: #f1f5f9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            color: #64748b;
+        }
+        
+        .flight-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .flight-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        /* Confirmation Page */
+        .confirmation-card {
+            background-color: var(--card);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+        
+        .confirmation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .confirmation-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .passenger-info {
+            margin-bottom: 2rem;
+        }
+        
+        .info-row {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            width: 150px;
+            color: #64748b;
+        }
+        
+        .info-value {
+            flex: 1;
+        }
+        
+        /* Seat Selection Page */
+        .seat-selection-container {
+            background-color: var(--card);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .aircraft-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+        }
+        
+        .aircraft-cabin {
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+            background-color: #f1f5f9;
+            border-radius: 0.5rem;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .cabin-class {
+            margin-bottom: 2rem;
+        }
+        
+        .class-label {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #64748b;
+        }
+        
+        .seat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .seat {
+            width: 32px;
+            height: 32px;
+            background-color: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .seat:hover {
+            border-color: var(--primary);
+        }
+        
+        .seat.selected {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .seat.occupied {
+            background-color: #fecaca;
+            border-color: #f87171;
+            cursor: not-allowed;
+        }
+        
+        .seat-legend {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 0.25rem;
+        }
+        
+        .available-color {
+            background-color: var(--card);
+            border: 2px solid var(--border);
+        }
+        
+        .selected-color {
+            background-color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .occupied-color {
+            background-color: #fecaca;
+            border: 2px solid #f87171;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .flight-details {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .flight-info {
+                text-align: left;
+                width: 100%;
+            }
+            
+            .info-row {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+        }
+        
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">SkyWings</div>
+        <nav>
+            <ul>
+                <li><a href="#flight-search">Search</a></li>
+                <li><a href="#flight-details">Details</a></li>
+                <li><a href="#seat-selection">Seats</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Flight Search Page -->
+        <div id="flight-search">
+            <h1 class="section-title">Find Your Flight</h1>
+            <div class="search-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="departure">From</label>
+                        <select id="departure">
+                            <option value="">Select Departure</option>
+                            <option value="JFK">New York (JFK)</option>
+                            <option value="LAX">Los Angeles (LAX)</option>
+                            <option value="ORD">Chicago (ORD)</option>
+                            <option value="DFW">Dallas (DFW)</option>
+                            <option value="SFO">San Francisco (SFO)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="arrival">To</label>
+                        <select id="arrival">
+                            <option value="">Select Arrival</option>
+                            <option value="LHR">London (LHR)</option>
+                            <option value="CDG">Paris (CDG)</option>
+                            <option value="FRA">Frankfurt (FRA)</option>
+                            <option value="DXB">Dubai (DXB)</option>
+                            <option value="HND">Tokyo (HND)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="departure-date">Departure Date</label>
+                        <input type="date" id="departure-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="return-date">Return Date</label>
+                        <input type="date" id="return-date">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="passengers">Passengers</label>
+                        <select id="passengers">
+                            <option value="1">1 Passenger</option>
+                            <option value="2">2 Passengers</option>
+                            <option value="3">3 Passengers</option>
+                            <option value="4">4 Passengers</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="class">Class</label>
+                        <select id="class">
+                            <option value="economy">Economy</option>
+                            <option value="premium">Premium Economy</option>
+                            <option value="business">Business</option>
+                            <option value="first">First Class</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" id="search-btn">Search Flights</button>
+            </div>
+            
+            <div class="results-container hidden" id="results-container">
+                <h2 class="section-title">Available Flights</h2>
+                <div id="flight-results"></div>
+            </div>
+        </div>
+
+        <!-- Flight Details Confirmation Page -->
+        <div id="flight-details" class="hidden">
+            <h1 class="section-title">Confirm Your Flight</h1>
+            <div class="confirmation-card">
+                <div class="confirmation-header">
+                    <div class="confirmation-title">Flight Confirmation</div>
+                    <div class="flight-price">$1,250.00</div>
+                </div>
+                
+                <div class="passenger-info">
+                    <h3>Flight Information</h3>
+                    <div class="info-row">
+                        <div class="info-label">Flight Number:</div>
+                        <div class="info-value">SW456</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Departure:</div>
+                        <div class="info-value">
+                            <span class="flight-time">10:30 AM</span> - 
+                            <span class="flight-city">New York (JFK)</span>, 
+                            <span id="departure-date-confirm">Thu, May 12, 2023</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Arrival:</div>
+                        <div class="info-value">
+                            <span class="flight-time">11:45 PM</span> - 
+                            <span class="flight-city">London (LHR)</span>, 
+                            <span id="arrival-date-confirm">Fri, May 13, 2023</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Duration:</div>
+                        <div class="info-value">7h 15m (Direct)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Class:</div>
+                        <div class="info-value">Economy</div>
+                    </div>
+                </div>
+                
+                <div class="passenger-info">
+                    <h3>Passenger Information</h3>
+                    <div class="info-row">
+                        <div class="info-label">Name:</div>
+                        <div class="info-value">John Doe</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Email:</div>
+                        <div class="info-value">john.doe@example.com</div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <button class="btn" id="confirm-flight-btn">Confirm & Proceed to Seat Selection</button>
+                    <button class="btn btn-secondary" id="edit-flight-btn">Edit Flight</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seat Selection Page -->
+        <div id="seat-selection" class="hidden">
+            <h1 class="section-title">Select Your Seats</h1>
+            <div class="seat-selection-container">
+                <h2>Flight SW456: New York (JFK) to London (LHR)</h2>
+                <div class="flight-duration">Fri, May 12, 2023 • Economy Class</div>
+                
+                <div class="seat-legend">
+                    <div class="legend-item">
+                        <div class="legend-color available-color"></div>
+                        <span>Available</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color selected-color"></div>
+                        <span>Selected</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color occupied-color"></div>
+                        <span>Occupied</span>
+                    </div>
+                </div>
+                
+                <div class="aircraft-layout">
+                    <div class="aircraft-cabin">
+                        <div class="cabin-class">
+                            <div class="class-label">Economy Class</div>
+                            <div class="seat-row">
+                                <div class="seat" data-seat="1A">1A</div>
+                                <div class="seat" data-seat="1B">1B</div>
+                                <div class="seat occupied" data-seat="1C">1C</div>
+                                <div class="seat occupied" data-seat="1D">1D</div>
+                                <div class="seat" data-seat="1E">1E</div>
+                                <div class="seat" data-seat="1F">1F</div>
+                            </div>
+                            <div class="seat-row">
+                                <div class="seat" data-seat="2A">2A</div>
+                                <div class="seat" data-seat="2B">2B</div>
+                                <div class="seat occupied" data-seat="2C">2C</div>
+                                <div class="seat occupied" data-seat="2D">2D</div>
+                                <div class="seat" data-seat="2E">2E</div>
+                                <div class="seat" data-seat="2F">2F</div>
+                            </div>
+                            <div class="seat-row">
+                                <div class="seat" data-seat="3A">3A</div>
+                                <div class="seat" data-seat="3B">3B</div>
+                                <div class="seat" data-seat="3C">3C</div>
+                                <div class="seat" data-seat="3D">3D</div>
+                                <div class="seat" data-seat="3E">3E</div>
+                                <div class="seat" data-seat="3F">3F</div>
+                            </div>
+                            <div class="seat-row">
+                                <div class="seat" data-seat="4A">4A</div>
+                                <div class="seat occupied" data-seat="4B">4B</div>
+                                <div class="seat" data-seat="4C">4C</div>
+                                <div class="seat" data-seat="4D">4D</div>
+                                <div class="seat occupied" data-seat="4E">4E</div>
+                                <div class="seat" data-seat="4F">4F</div>
+                            </div>
+                            <div class="seat-row">
+                                <div class="seat" data-seat="5A">5A</div>
+                                <div class="seat" data-seat="5B">5B</div>
+                                <div class="seat" data-seat="5C">5C</div>
+                                <div class="seat" data-seat="5D">5D</div>
+                                <div class="seat" data-seat="5E">5E</div>
+                                <div class="seat occupied" data-seat="5F">5F</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <button class="btn" id="confirm-seats-btn">Confirm Seats</button>
+                    <button class="btn btn-secondary" id="back-to-flight-btn">Back to Flight Details</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Booking Confirmation Page -->
+        <div id="booking-confirmation" class="hidden">
+            <h1 class="section-title">Booking Confirmation</h1>
+            <div class="confirmation-card">
+                <div class="confirmation-header">
+                    <div class="confirmation-title">Your Booking is Confirmed!</div>
+                    <div class="flight-price">$1,250.00</div>
+                </div>
+                
+                <div class="passenger-info">
+                    <h3>Flight Details</h3>
+                    <div class="info-row">
+                        <div class="info-label">Booking Reference:</div>
+                        <div class="info-value" id="booking-reference">SKW87495621</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Flight Number:</div>
+                        <div class="info-value">SW456</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Route:</div>
+                        <div class="info-value">New York (JFK) to London (LHR)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Departure:</div>
+                        <div class="info-value" id="confirmation-departure">Thu, May 12, 2023 at 10:30 AM</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Arrival:</div>
+                        <div class="info-value" id="confirmation-arrival">Fri, May 13, 2023 at 11:45 PM</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Selected Seats:</div>
+                        <div class="info-value" id="selected-seats-list">3A, 3B</div>
+                    </div>
+                </div>
+                
+                <div class="passenger-info">
+                    <h3>Passenger Information</h3>
+                    <div class="info-row">
+                        <div class="info-label">Name:</div>
+                        <div class="info-value">John Doe</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Email:</div>
+                        <div class="info-value">john.doe@example.com</div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <button class="btn" id="download-ticket-btn">Download Ticket</button>
+                    <button class="btn btn-secondary" id="back-to-seats-btn">Back to Seat Selection</button>
+                    <button class="btn btn-secondary" id="new-booking-btn">Make Another Booking</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Booking Confirmation Page -->
+        <div id="booking-confirmation" class="hidden">
+            <h1 class="section-title">Booking Confirmation</h1>
+            <div class="confirmation-card">
+                <div class="confirmation-header">
+                    <div class="confirmation-title">Your Booking is Confirmed!</div>
+                    <div class="flight-price">$1,250.00</div>
+                </div>
+                
+                <div class="passenger-info">
+                    <h3>Flight Details</h3>
+                    <div class="info-row">
+                        <div class="info-label">Booking Reference:</div>
+                        <div class="info-value" id="booking-reference">SKW87495621</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Flight Number:</div>
+                        <div class="info-value">SW456</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Route:</div>
+                        <div class="info-value">New York (JFK) to London (LHR)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Departure:</div>
+                        <div class="info-value" id="confirmation-departure">Thu, May 12, 2023 at 10:30 AM</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Arrival:</div>
+                        <div class="info-value" id="confirmation-arrival">Fri, May 13, 2023 at 11:45 PM</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Selected Seats:</div>
+                        <div class="info-value" id="selected-seats-list">3A, 3B</div>
+                    </div>
+                </div>
+                
+                <div class="passenger-info">
+                    <h3>Passenger Information</h3>
+                    <div class="info-row">
+                        <div class="info-label">Name:</div>
+                        <div class="info-value">John Doe</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Email:</div>
+                        <div class="info-value">john.doe@example.com</div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <button class="btn" id="download-ticket-btn">Download Ticket</button>
+                    <button class="btn btn-secondary" id="new-booking-btn">Make Another Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Flight Search Page
+            const searchBtn = document.getElementById('search-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const flightResults = document.getElementById('flight-results');
+            
+            searchBtn.addEventListener('click', function() {
+                // Simulate API call delay
+                setTimeout(() => {
+                    generateFlightResults();
+                    resultsContainer.classList.remove('hidden');
+                    
+                    // Scroll to results
+                    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+                }, 800);
+            });
+            
+            function generateFlightResults() {
+                flightResults.innerHTML = `
+                    <div class="flight-card">
+                        <div class="flight-header">
+                            <div class="airline">
+                                <div class="airline-logo">SW</div>
+                                <span>SkyWings Airlines</span>
+                            </div>
+                            <div class="flight-price">$1,250.00</div>
+                        </div>
+                        <div class="flight-details">
+                            <div class="flight-info">
+                                <div class="flight-time">10:30 AM</div>
+                                <div class="flight-city">New York (JFK)</div>
+                            </div>
+                            <div class="flight-route">
+                                <div class="flight-duration">7h 15m</div>
+                                <div class="flight-stops">Direct</div>
+                            </div>
+                            <div class="flight-info">
+                                <div class="flight-time">11:45 PM</div>
+                                <div class="flight-city">London (LHR)</div>
+                            </div>
+                        </div>
+                        <div class="flight-footer">
+                            <div>Flight #SW456</div>
+                            <button class="select-btn" id="select-flight-btn">Select</button>
+                        </div>
+                    </div>
+                    
+                    <div class="flight-card">
+                        <div class="flight-header">
+                            <div class="airline">
+                                <div class="airline-logo">GA</div>
+                                <span>Global Airways</span>
+                            </div>
+                            <div class="flight-price">$1,450.00</div>
+                        </div>
+                        <div class="flight-details">
+                            <div class="flight-info">
+                                <div class="flight-time">11:55 AM</div>
+                                <div class="flight-city">New York (JFK)</div>
+                            </div>
+                            <div class="flight-route">
+                                <div class="flight-duration">8h 05m</div>
+                                <div class="flight-stops">Direct</div>
+                            </div>
+                            <div class="flight-info">
+                                <div class="flight-time">1:00 AM</div>
+                                <div class="flight-city">London (LHR)</div>
+                            </div>
+                        </div>
+                        <div class="flight-footer">
+                            <div>Flight #GA789</div>
+                            <button class="select-btn">Select</button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listener to select flight button
+                document.getElementById('select-flight-btn').addEventListener('click', function() {
+                    document.getElementById('flight-search').classList.add('hidden');
+                    document.getElementById('flight-details').classList.remove('hidden');
+                    
+                    // Update confirmation page with selected flight details
+                    const departureDate = document.getElementById('departure-date').value;
+                    const formattedDate = formatDate(departureDate);
+                    document.getElementById('departure-date-confirm').textContent = formattedDate;
+                    document.getElementById('arrival-date-confirm').textContent = formattedDate;
+                });
+            }
+            
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+                return date.toLocaleDateString('en-US', options);
+            }
+            
+            // Flight Details Confirmation Page
+            const confirmFlightBtn = document.getElementById('confirm-flight-btn');
+            const editFlightBtn = document.getElementById('edit-flight-btn');
+            
+            confirmFlightBtn.addEventListener('click', function() {
+                document.getElementById('flight-details').classList.add('hidden');
+                document.getElementById('seat-selection').classList.remove('hidden');
+            });
+            
+            editFlightBtn.addEventListener('click', function() {
+                document.getElementById('flight-details').classList.add('hidden');
+                document.getElementById('flight-search').classList.remove('hidden');
+            });
+            
+            // Seat Selection Page
+            const seats = document.querySelectorAll('.seat:not(.occupied)');
+            const confirmSeatsBtn = document.getElementById('confirm-seats-btn');
+            const backToFlightBtn = document.getElementById('back-to-flight-btn');
+            
+            seats.forEach(seat => {
+                seat.addEventListener('click', function() {
+                    if (!this.classList.contains('occupied')) {
+                        this.classList.toggle('selected');
+                    }
+                });
+            });
+            
+            confirmSeatsBtn.addEventListener('click', function() {
+                const selectedSeats = document.querySelectorAll('.seat.selected');
+                if (selectedSeats.length > 0) {
+                    // Get selected seat numbers
+                    const seatNumbers = Array.from(selectedSeats).map(seat => 
+                        seat.getAttribute('data-seat')
+                    );
+                    
+                    // Update confirmation page with seat info
+                    document.getElementById('selected-seats-list').textContent = seatNumbers.join(', ');
+                    
+                    // Copy flight details to confirmation page
+                    document.getElementById('confirmation-departure').textContent = 
+                        document.getElementById('departure-date-confirm').textContent + ' at 10:30 AM';
+                    document.getElementById('confirmation-arrival').textContent = 
+                        document.getElementById('arrival-date-confirm').textContent + ' at 11:45 PM';
+                    
+                    // Show confirmation page
+                    document.getElementById('seat-selection').classList.add('hidden');
+                    document.getElementById('booking-confirmation').classList.remove('hidden');
+                } else {
+                    alert('Please select at least one seat');
+                }
+            });
+            
+            backToFlightBtn.addEventListener('click', function() {
+                document.getElementById('seat-selection').classList.add('hidden');
+                document.getElementById('flight-details').classList.remove('hidden');
+            });
+
+            document.getElementById('download-ticket-btn').addEventListener('click', function() {
+                alert('Ticket download started! (Simulated)');
+            });
+
+            // Back to seat selection
+            document.getElementById('back-to-seats-btn').addEventListener('click', function() {
+                document.getElementById('booking-confirmation').classList.add('hidden');
+                document.getElementById('seat-selection').classList.remove('hidden');
+            });
+
+            document.getElementById('new-booking-btn').addEventListener('click', function() {
+                // Reset to first page
+                document.getElementById('booking-confirmation').classList.add('hidden');
+                document.getElementById('flight-search').classList.remove('hidden');
+                
+                // Clear any selected seats
+                document.querySelectorAll('.seat.selected').forEach(seat => {
+                    seat.classList.remove('selected');
+                });
+            });
+
+            document.getElementById('download-ticket-btn').addEventListener('click', function() {
+                alert('Ticket download started! (Simulated)');
+            });
+
+            document.getElementById('new-booking-btn').addEventListener('click', function() {
+                // Reset to first page
+                document.getElementById('booking-confirmation').classList.add('hidden');
+                document.getElementById('flight-search').classList.remove('hidden');
+                
+                // Clear any selected seats
+                document.querySelectorAll('.seat.selected').forEach(seat => {
+                    seat.classList.remove('selected');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

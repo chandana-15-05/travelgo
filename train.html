@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TravelGo - Train Booking</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <style>
+    body {
+      background:rgb(31, 115, 200);
+      font-family: 'Segoe UI', sans-serif;
+      padding: 40px;
+    }
+    .container {
+      background: blue;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+    .title {
+      text-align: center;
+      margin-bottom: 30px;
+      color:rgb(220, 227, 238);
+    }
+    .train-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background:rgb(18, 238, 205);
+    }
+    .btn-book {
+      background-color: #28a745;
+      color: white;
+    }
+    .btn-book:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="title">🚄 Search & Book Trains</h2>
+    <form id="searchForm" class="form-row mb-4">
+      <div class="form-group col-md-3">
+        <label for="source">From</label>
+        <select id="source" class="form-control" required>
+          <option value="">Select Source</option>
+          <option>Hyderabad</option>
+          <option>Chennai</option>
+          <option>Mumbai</option>
+          <option>Delhi</option>
+        </select>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="destination">To</label>
+        <select id="destination" class="form-control" required>
+          <option value="">Select Destination</option>
+          <option>Hyderabad</option>
+          <option>Chennai</option>
+          <option>Mumbai</option>
+          <option>Delhi</option>
+        </select>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="date">Travel Date</label>
+        <input type="date" id="date" class="form-control" required>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="persons">Passengers</label>
+        <select id="persons" class="form-control" required>
+          <option value="">Select</option>
+          {% for i in range(1, 11) %}
+          <option value="{{ i }}">{{ i }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group col-md-12 text-center mt-3">
+        <button type="submit" class="btn btn-primary">Search Trains</button>
+      </div>
+    </form>
+
+    <div id="resultsContainer"></div>
+  </div>
+
+  <script>
+    const trains = [
+      {
+        train_number: "TG101",
+        name: "TravelGo Express",
+        source: "Hyderabad",
+        destination: "Delhi",
+        departure_time: "08:00 AM",
+        arrival_time: "08:00 PM",
+        train_type: "AC",
+        price: 1200
+      },
+      {
+        train_number: "TG102",
+        name: "Southern Line",
+        source: "Chennai",
+        destination: "Mumbai",
+        departure_time: "06:00 AM",
+        arrival_time: "06:00 PM",
+        train_type: "Non-AC",
+        price: 900
+      },
+      {
+        train_number: "TG103",
+        name: "Western Shatabdi",
+        source: "Mumbai",
+        destination: "Delhi",
+        departure_time: "10:00 AM",
+        arrival_time: "10:00 PM",
+        train_type: "AC",
+        price: 1400
+      },
+      {
+        train_number: "TG104",
+        name: "Central Superfast",
+        source: "Hyderabad",
+        destination: "Chennai",
+        departure_time: "09:00 AM",
+        arrival_time: "07:00 PM",
+        train_type: "AC",
+        price: 1100
+      },
+      {
+        train_number: "TG105",
+        name: "Northern Duronto",
+        source: "Delhi",
+        destination: "Hyderabad",
+        departure_time: "05:30 AM",
+        arrival_time: "06:30 PM",
+        train_type: "Non-AC",
+        price: 950
+      }
+    ];
+
+    document.getElementById("searchForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const source = document.getElementById("source").value;
+      const destination = document.getElementById("destination").value;
+      const date = document.getElementById("date").value;
+      const persons = document.getElementById("persons").value;
+      const resultsContainer = document.getElementById("resultsContainer");
+
+      resultsContainer.innerHTML = ""; // Clear previous results
+
+      const filteredTrains = trains.filter(
+        (t) => t.source === source && t.destination === destination
+      );
+
+      if (filteredTrains.length === 0) {
+        resultsContainer.innerHTML = `<div class="alert alert-warning">No trains found for selected route.</div>`;
+        return;
+      }
+
+      filteredTrains.forEach((train, index) => {
+        const total = train.price * persons;
+        const url = `/confirm_train_details?name=${train.name}&trainNumber=${train.train_number}&source=${train.source}&destination=${train.destination}&departureTime=${train.departure_time}&arrivalTime=${train.arrival_time}&price=${train.price}&date=${date}&persons=${persons}&trainId=${index}`;
+        resultsContainer.innerHTML += `
+          <div class="train-card">
+            <h5>${train.name} (${train.train_number})</h5>
+            <p><strong>Route:</strong> ${train.source} ➝ ${train.destination}</p>
+            <p><strong>Departure:</strong> ${train.departure_time} | <strong>Arrival:</strong> ${train.arrival_time}</p>
+            <p><strong>Type:</strong> ${train.train_type} | <strong>Price/person:</strong> ₹${train.price}</p>
+            <a href="${url}" class="btn btn-book">Book Now</a>
+          </div>`;
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Confirm Train Booking - TravelGo</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #e0f7fa;
+      margin: 0;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .confirmation-box {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #00796b;
+    }
+
+    .info {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: left;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .info span {
+      font-weight: bold;
+    }
+
+    .btn {
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #004d40;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="confirmation-box">
+    <h1>Train Booking Confirmed!</h1>
+    <p class="info">
+      <span>Passenger Name:</span> {{ passenger_name }}<br>
+      <span>Train Name:</span> {{ train_name }}<br>
+      <span>From:</span> {{ departure }}<br>
+      <span>To:</span> {{ arrival }}<br>
+      <span>Date of Journey:</span> {{ date }}<br>
+      <span>Seat Number:</span> {{ seat_number }}
+    </p>
+
+    <a href="/dashboard"><button class="btn">Go to Dashboard</button></a>
+  </div>
+
+</body>
+</html>

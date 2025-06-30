@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Flight Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f8ff;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2563eb;
+        }
+        .flight-info {
+            margin-top: 30px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .label {
+            font-weight: 600;
+            color: #555;
+        }
+        .value {
+            color: #111;
+        }
+        .confirm-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 30px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .confirm-button:hover {
+            background-color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Confirm Flight Details</h1>
+        <div class="flight-info">
+            <div class="info-row">
+                <span class="label">Flight Name:</span>
+                <span class="value" id="flightName"></span>
+            </div>
+            <div class="info-row">
+                <span class="label">Source:</span>
+                <span class="value" id="source"></span>
+            </div>
+            <div class="info-row">
+                <span class="label">Destination:</span>
+                <span class="value" id="destination"></span>
+            </div>
+            <div class="info-row">
+                <span class="label">Departure:</span>
+                <span class="value" id="departureTime"></span>
+            </div>
+            <div class="info-row">
+                <span class="label">Arrival:</span>
+                <span class="value" id="arrivalTime"></span>
+            </div>
+            <div class="info-row">
+                <span class="label">Class:</span>
+                <span class="value" id="flightClass"></span>
+            </div>
+            <div class="info-row">
+                <span class="label">No. of Passengers:</span>
+                <span class="value" id="passengers"></span>
+            </div>
+            <div class="info-row">
+                <span class="label">Total Price:</span>
+                <span class="value" id="totalPrice"></span>
+            </div>
+        </div>
+        <button class="confirm-button">Confirm Booking</button>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const flightName = urlParams.get("name") || "Not Available";
+        const source = urlParams.get("source") || "--";
+        const destination = urlParams.get("destination") || "--";
+        const departure = urlParams.get("departure") || "--";
+        const arrival = urlParams.get("arrival") || "--";
+        const passengers = urlParams.get("passengers") || "1";
+        const price = parseInt(urlParams.get("price")) || 0;
+        const flightClass = urlParams.get("class") || "Economy";
+
+        const total = price * parseInt(passengers);
+
+        document.getElementById("flightName").textContent = flightName;
+        document.getElementById("source").textContent = source;
+        document.getElementById("destination").textContent = destination;
+        document.getElementById("departureTime").textContent = departure;
+        document.getElementById("arrivalTime").textContent = arrival;
+        document.getElementById("passengers").textContent = passengers;
+        document.getElementById("totalPrice").textContent = `₹${total}`;
+        document.getElementById("flightClass").textContent = flightClass;
+    </script>
+</body>
+</html>

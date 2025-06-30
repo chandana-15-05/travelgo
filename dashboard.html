@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dashboard-TravelGo</title>
+        <style>
+            /* Your existing CSS (no changes needed here) */
+            body {
+                margin: 0;
+                font-family: 'Segoe UI', sans-serif;
+                background-color: #f2f7ff;
+            }
+
+            .navbar {
+                background-color: #004aad;
+                padding: 15px 30px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: white;
+            }
+
+            .navbar h1 {
+                margin: 0;
+                font-size: 24px;
+            }
+
+            .navbar nav a {
+                color: white;
+                text-decoration: none;
+                margin-left: 20px;
+                font-weight: 500;
+            }
+
+            .navbar .logout {
+                background-color: #ff5252;
+                padding: 5px 12px;
+                border-radius: 6px;
+                font-weight: bold;
+            }
+
+            .dashboard-container {
+                padding: 30px;
+                max-width: 1000px;
+                margin: auto;
+            }
+
+            .Welcome {
+                font-size: 22px;
+                font-weight: 500;
+                margin-bottom: 30px;
+                color: #333;
+            }
+
+            .booking-options {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                margin-bottom: 40px;
+            }
+
+            .booking-options a {
+                flex: 1 1 22%; /* Adjusted for responsiveness */
+                margin: 10px;
+                text-align: center;
+                transition: transform 0.3s;
+                min-width: 150px; /* Ensure minimum width for smaller screens */
+            }
+
+            .booking-options img {
+                width: 100%;
+                max-height: 120px;
+                object-fit: cover;
+                border-radius: 10px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+
+            .booking-options a:hover {
+                transform: scale(1.05);
+            }
+
+            .bookings {
+                background: white;
+                padding: 20px 25px;
+                border-radius: 12px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+
+            .bookings h3 {
+                margin-top: 0;
+                color: #004aad;
+                margin-bottom: 15px;
+            }
+
+            .booking-item {
+                padding: 12px 0;
+                border-bottom: 1px solid #ddd;
+                display: flex;
+                flex-wrap: wrap; /* Allow wrapping on smaller screens */
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px; /* Space between items */
+            }
+
+            .booking-item:last-child {
+                border-bottom: none; /* No border for the last item */
+            }
+
+            .booking-details-summary {
+                flex-grow: 1; /* Allow details to take available space */
+                min-width: 200px; /* Minimum width for details */
+            }
+            .booking-item p {
+                margin: 2px 0; /* Adjust line spacing */
+                color: #555;
+                font-size: 14px;
+            }
+            .booking-item strong {
+                color: #004aad;
+                font-size: 16px;
+            }
+
+            .cancel-btn {
+                background-color: #ff5252;
+                border: none;
+                color: white;
+                padding: 6px 10px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+            .cancel-btn:hover {
+                background-color: #e63e3e;
+            }
+        </style>
+    </head>
+<body>
+    <div class="navbar">
+        <h1>TravelGo</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="#">AboutUs</a>
+            <a href="#">ContactUs</a>
+            <a href="/logout" class="logout">Logout</a>
+        </nav>
+    </div>
+
+    <div class="dashboard-container">
+        <p class="Welcome">Welcome, {{ username }}!</p> 
+
+        <div class="booking-options">
+        <a href="/bus">
+            <img src="https://www.volvobuses.com/content/dam/volvo-buses/markets/global/classic/news/2020/1860x1050-9400-Intercity-coach-BS4-2020.jpg" alt="Bus">
+        </a>
+        <a href="/train">
+            <img src="https://img.etimg.com/thumb/width-1200,height-900,imgsize-1063601,resizemode-75,msid-115732108/industry/transportation/railways/high-speed-trains-indian-railways-280-kmph-speed-aerodynamic-design-indias-next-high-speed-trains-are-coming-soon-beml-icf-ashwini-vaishnaw.jpg" alt="Train">
+        </a>
+        <a href="/flight">
+            <img src="https://t4.ftcdn.net/jpg/01/44/15/39/360_F_144153949_FDLHLy7dTiSSgVPBRW3Q660dpCIsFBZL.jpg" alt="Flight">
+        </a>
+        <a href="/hotels">
+            <img src="https://p4.wallpaperbetter.com/wallpaper/814/350/568/spa-beach-hotel-infinity-pool-wallpaper-preview.jpg" alt="Hotel">
+        </a>
+    </div>
+
+
+
+        <div class="bookings">
+            <h3>YOUR BOOKINGS</h3>
+
+            {% if bookings %}
+                {% for b in bookings %}
+                <div class="booking-item">
+                    <div class="booking-details-summary">
+                        <strong>{{ b.get('booking_type', 'N/A') | capitalize }} Booking: {{ b.get('name', 'N/A') }}</strong>
+                        <p>Route: {{ b.get('source', 'N/A') }} to {{ b.get('destination', 'N/A') }}</p>
+                        {# Display time or departure/arrival for trains #}
+                        {% if b.get('booking_type') == 'bus' %}
+                            <p>Date: {{ b.get('travel_date', 'N/A') }} at {{ b.get('time', 'N/A') }}</p>
+                        {% elif b.get('booking_type') == 'train' %}
+                            <p>Date: {{ b.get('travel_date', 'N/A') }} (Dep: {{ b.get('departure_time', 'N/A') }} Arr: {{ b.get('arrival_time', 'N/A') }})</p>
+                            <p>Train No: {{ b.get('train_number', 'N/A') }}</p>
+                        {% else %} {# Fallback for other types or if time/dates are missing #}
+                             <p>Date: {{ b.get('travel_date', 'N/A') }} Time: {{ b.get('time', 'N/A') }}</p>
+                        {% endif %}
+                        
+                        {# Display vehicle type (for bus) or specific details for train #}
+                        <p>Type: {{ b.get('vehicle_type', 'N/A') }} | Persons: {{ b.get('num_persons', 0) }}</p>
+                        
+                        {% if b.get('selected_seats') %}
+                            <p>Seats: {{ b.selected_seats | join(', ') }}</p>
+                        {% endif %}
+                        <p>Total Price: ₹{{ b.get('total_price', 0) | int }}</p>
+                        <p style="font-size: 12px; color: #888;">Booked On: {{ b.get('booking_date', 'N/A').split('T')[0] }}</p>
+                    </div>
+
+                    <form method="POST" action="/cancel_booking" style="display: inline;">
+                        <input type="hidden" name="booking_id" value="{{ b.get('_id', '') }}">
+                        <button type="submit" class="cancel-btn">Cancel</button>
+                    </form>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No Bookings Yet. Start your journey by booking tickets!</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
